@@ -10,7 +10,7 @@ g++ src/main.cpp src/utils.cpp src/sensor.cpp src/analytics.cpp src/storage.cpp 
 .\SensorSystem.exe
 ```
 
-## main.cpp | The program controller
+## main.cpp
 -	Shows the main menu
 -	Handles user input
 -	Creates sensors
@@ -19,7 +19,7 @@ g++ src/main.cpp src/utils.cpp src/sensor.cpp src/analytics.cpp src/storage.cpp 
 -	Delegates actual work to other classes
 ##### Think of it as the user interface logic.
 
-## sensor.cpp / .hpp | Sensor objects
+## sensor.cpp / .hpp 
 Each sensor has:
 -	name
 -	unit
@@ -33,27 +33,24 @@ The 'read()':
 -	Returns the numeric value
 ##### Sensors are the data producers.
 
-## measurement.cpp / .cpp | Single measurement
+## measurement.cpp / .cpp 
 Represents one reading:
 -   value
 -   sensor name
 -   sensor ID
 -   unit
 -   timestamp
-Like: [2025-05-01 12:34:56] 1 Temperature     120°C
 
-## storage.cpp / .hpp | Stores all measurements
-A singleton:
+## storage.cpp / .hpp
 -   addMeasurement() — store new reading
 -   printAll() — print all stored readings
 -   getMeasurementsBySensor() — filter by sensor
 -   printSensorAnalytics() — min/max/mean/stdev
 ##### Acts like a database.
 
-## analytics.cpp / .hpp | Math calculations
+## statistics.cpp / .hpp 
 Math helpers for storage:
 -   Minimum value
 -   Maximum value
 -   Average
 -   Standard deviation
-##### Analytics is the statistics section.

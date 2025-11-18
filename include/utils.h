@@ -8,6 +8,8 @@ namespace utils {
     //  main menu print
     void printMainMenu();
 
+    void printSensorMenu();
+
     //  clear terminal
     void clearScreen();
 }

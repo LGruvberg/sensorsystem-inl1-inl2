@@ -1,4 +1,4 @@
-#include "../include/utils.hpp"
+#include "../include/utils.h"
 #include <iostream>
 #include <limits>
 
@@ -17,14 +17,26 @@ bool inputInt(int& out) {
 }
 
 void printMainMenu() {
-    std::cout << "\n===== MAIN MENU =====\n"
-              << "1. Read new measurements from all sensors\n"
-              << "2. Show statistics per sensor\n"
-              << "3. Show all measurements\n"
-              << "4. Save measurements to file\n"
-              << "5. Load measurements from file\n"
-              << "6. Exit\n"
-              << "Select option: ";
+    std::cout 
+    << "\n:::::::::::::: MAIN :: MENU ::::::::::::::\n"
+    << "1.\tRead new measurements from sensor(s)\n"
+    << "2.\tShow all measurements\n"
+    << "3.\tSave measurements to file\n"
+    << "4.\tLoad measurements from file\n"
+    << "5.\tExit\n"
+    << "Select:\t";
+}
+
+void printSensorMenu() {
+    std::cout 
+    << "\n::::::::::::: SENSOR :: MENU :::::::::::::\n"
+    << "::Read new measurements from:\n"
+    << "1.\tALL sensors\n"
+    << "2.\tSensor:\tTemperature\n"
+    << "3.\tSensor:\tLight\n"
+    << "4.\tSensor:\tHumidity\n"
+    << "5.\tReturn to main menu\n"
+    << "Select:\t";
 }
 
 void clearScreen() {

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ctime>
-#include "../include/sensor.hpp"
+#include "../include/sensor.h"
 
 double Sensor::read(MeasurementStorage& storage) {
     // Random generator

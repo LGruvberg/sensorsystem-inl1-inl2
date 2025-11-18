@@ -1,6 +1,6 @@
 #pragma once;
-#include "measurement.hpp"
-#include "storage.hpp"
+#include "measurement.h"
+#include "storage.h"
 #include <string>
 #include <random>
 

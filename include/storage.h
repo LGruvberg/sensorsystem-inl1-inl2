@@ -1,5 +1,5 @@
 #pragma once
-#include "measurement.hpp"
+#include "measurement.h"
 #include <vector>
 
 class MeasurementStorage {  // class storing all measurements

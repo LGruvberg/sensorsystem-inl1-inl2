@@ -82,9 +82,10 @@ int main() {
                 std::cout
                 << "\n.:::::::: STATISTICS ::::::::."
                 << "\nSelect sensor:\n"
-                << "1. Temperature\n"
-                << "2. Light\n"
-                << "3. Humidity\n"
+                << "1. All sensors\n"
+                << "2. Temperature\n"
+                << "3. Light\n"
+                << "4. Humidity\n"
                 << "Select: ";
 
                 int s = 0;
@@ -94,28 +95,22 @@ int main() {
                     break;
                 }
 
-                std::string selectedSensor;
-
-                if (s == 1) {
-                    selectedSensor = "Temperature"; 
-                }
-                else if (s == 2) {
-                    selectedSensor = "Light"; 
-                } 
-                else if (s == 3) {
-                    selectedSensor = "Humidity";
-                }
-                else {
-                    std::cout << ":: Invalid selection\n";
-                    break;
-                }
-
-                // Get all measurements for THIS sensor
-                auto data = storage.getBySensor(selectedSensor);
+                std::vector<Measurement> data;
+                if (s == 1) {   // ALL sensors
+                    data = storage.getAll();
+                    } else if (s == 2) {
+                        data = storage.getBySensor("Temperature");
+                    } else if (s == 3) {
+                        data = storage.getBySensor("Light");
+                    } else if (s == 4) {
+                        data = storage.getBySensor("Humidity");
+                    } else {
+                        std::cout << ":: Invalid selection\n";
+                        break;
+                    }
 
                 if (data.empty()) {
-                    std::cout << ":: No measurements found for '"
-                    << selectedSensor << "'\n";
+                    std::cout << ":: No measurements found\n";
                     break;
                 }
 
@@ -125,13 +120,18 @@ int main() {
                 double mean = statistics::getMean(data); 
                 double sd = statistics::getStdDev(data);
                 
-                    std::cout << "\nStatistics for sensor: " << selectedSensor << "\n";
-                    std::cout << "--------------------------------\n";
-                    std::cout << "Count: " << data.size() << "\n";
-                    std::cout << "Min:   " << minM.value << " " << minM.unit << "\n";
-                    std::cout << "Max:   " << maxM.value << " " << maxM.unit << "\n";
-                    std::cout << "Mean:  " << mean << "\n";
-                    std::cout << "StdDev:" << sd << "\n";
+                // Print statistics header
+                std::cout << "\nStatistics for: ";
+                if (s == 1)         std::cout << "ALL sensors\n";
+                else if (s == 2)    std::cout << "Temperature\n";
+                else if (s == 3)    std::cout << "Light\n";
+                else if (s == 4)    std::cout << "Humidity\n";
+                std::cout << ".:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.\n";
+                std::cout << "Count: " << data.size() << "\n";
+                std::cout << "Min:   " << minM.value << " " << minM.unit << "\n";
+                std::cout << "Max:   " << maxM.value << " " << maxM.unit << "\n";
+                std::cout << "Mean:  " << mean << "\n";
+                std::cout << "StdDev:" << sd << "\n";
                 
 
                 break;

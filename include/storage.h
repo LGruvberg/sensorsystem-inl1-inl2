@@ -10,7 +10,11 @@ private:
 
 public:
 
-    //  Return all measurements for a sensor (used by main + statistics)
+    // Return all measurements for ALL sensors
+    const std::vector<Measurement>& getAll() const { 
+        return measurements; }
+
+    //  Return all measurements for ONE sensor (used by main + statistics)
     std::vector<Measurement> getBySensor(
         const std::string& sensorName) const;
 

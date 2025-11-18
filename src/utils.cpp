@@ -18,7 +18,7 @@ bool inputInt(int& out) {
 
 void printMainMenu() {
     std::cout 
-    << "\n:::::::::::::: MAIN :: MENU ::::::::::::::\n"
+    << "\n.:::::::::::::: MAIN :: MENU ::::::::::::::.\n"
     << "1.\tRead new measurements from sensor(s)\n"
     << "2.\tShow all measurements\n"
     << "3.\tSave measurements to file\n"
@@ -29,8 +29,8 @@ void printMainMenu() {
 
 void printSensorMenu() {
     std::cout 
-    << "\n::::::::::::: SENSOR :: MENU :::::::::::::\n"
-    << "::Read new measurements from:\n"
+    << "\n.:::::: SENSOR :: MENU ::::::."
+    << "\n:: Read new measurements from:\n"
     << "1.\tALL sensors\n"
     << "2.\tSensor:\tTemperature\n"
     << "3.\tSensor:\tLight\n"

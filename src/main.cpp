@@ -13,14 +13,16 @@
 -   Use your sensor submenu
 -   Read measurements from all or one sensor
 -   Print stored measurements
+
+(Note-to-self: commita i "presens", istället för "Added". skriv "Add")
 */
 
 int main() {
-    //  Create storage
+    //  Create storage obj (there should be just one while running the program)
     MeasurementStorage storage;
 
     //  Create sensors
-    Sensor temperature("Temperature", "C", -200.0, 200.0);
+    Sensor temperature("Temperature", "C", -50.0, 300.0);
     Sensor light("Light", "lx", 0.0, 1000.0);
     Sensor humidity("Humidity", "%", 20.0, 80.0);
 
@@ -34,13 +36,13 @@ int main() {
 
         if (!utils::inputInt(choice)) {
             std::cout << ":: Invalid input\n";
-            continue;   // back to top of loop
+            continue;
         }
 
         utils::clearScreen();
 
         if (choice == 5) {
-            std::cout << "Shutting down program!\n";
+            std::cout << ":: Shutting down...\n";
             break;
         }
 
@@ -75,21 +77,23 @@ int main() {
                 break;
             }
             case 2: // show all measurements
-            storage.printAll();
-            break;
+                storage.printAll();
+                break;
 
-            case 3: // save (wip)
-            std::cout << "Saving to file [WIP]\n";
-            break;
+            case 3:
+            storage.saveToFile("data/measurements.csv");
+            std::cout << ":: Saved measurements to 'data/measurements.csv'\n";
+                break;
 
-            case 4: // load (wip)
-            std::cout << "Loading to file [WIP]\n";
-            break;
+            case 4:
+            storage.loadFromFile("data/measurements.csv");
+            std::cout << ":: Loaded measurements from 'data/measurements.csv'\n";
+                break;
 
             default:
-            std::cout << ":: Invalid option\n";
-            break;
+                std::cout << ":: Invalid option\n";
+                break;
+            }
         }
         return 0;
     }
-}

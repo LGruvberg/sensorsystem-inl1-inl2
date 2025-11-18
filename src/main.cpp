@@ -20,7 +20,7 @@ int main() {
     MeasurementStorage storage;
 
     //  Create sensors
-    Sensor temperature("Temperature", "°C", -200.0, 200.0);
+    Sensor temperature("Temperature", "C", -200.0, 200.0);
     Sensor light("Light", "lx", 0.0, 1000.0);
     Sensor humidity("Humidity", "%", 20.0, 80.0);
 
@@ -92,3 +92,4 @@ int main() {
         }
         return 0;
     }
+}

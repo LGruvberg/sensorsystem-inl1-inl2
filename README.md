@@ -37,7 +37,6 @@ The 'read()':
 Represents one reading:
 -   value
 -   sensor name
--   sensor ID
 -   unit
 -   timestamp
 

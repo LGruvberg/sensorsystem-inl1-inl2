@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 #include "measurement.h"
 #include "storage.h"
 #include <string>

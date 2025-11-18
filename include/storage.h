@@ -6,8 +6,14 @@
 class MeasurementStorage {     
 private:
     std::vector<Measurement> measurements;  // store all measurements in memory
+    // std::vector<Measurement> getBySensor(const std::string& sensorName) const;  // Get all measurements belonging to one sensor name
 
 public:
+
+    //  Return all measurements for a sensor (used by main + statistics)
+    std::vector<Measurement> getBySensor(
+        const std::string& sensorName) const;
+
     //  Add a measurement to internal storage
     void addMeasurement(const Measurement& m);
 

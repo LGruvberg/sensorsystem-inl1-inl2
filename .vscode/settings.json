@@ -2,6 +2,7 @@
     "files.associations": {
         ".fantomasignore": "ignore",
         "string": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "vector": "cpp"
     }
 }

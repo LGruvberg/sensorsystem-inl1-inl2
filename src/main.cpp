@@ -1,6 +1,7 @@
 #include "../include/sensor.h"
 #include "../include/storage.h"
 #include "../include/utils.h"
+#include "../include/statistics.h"
 
 #include <iostream>
 #include <vector>
@@ -76,9 +77,65 @@ int main() {
 
                 break;
             }
-            case 2: // show all measurements
-                storage.printAll();
+            case 2: {// show all measurements
+                // storage.printAll();
+                std::cout
+                << "\n.:::::::: STATISTICS ::::::::."
+                << "\nSelect sensor:\n"
+                << "1. Temperature\n"
+                << "2. Light\n"
+                << "3. Humidity\n"
+                << "Select: ";
+
+                int s = 0;
+
+                if (!utils::inputInt(s)) {  // if 'input != 0'
+                    std::cout << ":: Invalid input\n";
+                    break;
+                }
+
+                std::string selectedSensor;
+
+                if (s == 1) {
+                    selectedSensor = "Temperature"; 
+                }
+                else if (s == 2) {
+                    selectedSensor = "Light"; 
+                } 
+                else if (s == 3) {
+                    selectedSensor = "Humidity";
+                }
+                else {
+                    std::cout << ":: Invalid selection\n";
+                    break;
+                }
+
+                // Get all measurements for THIS sensor
+                auto data = storage.getBySensor(selectedSensor);
+
+                if (data.empty()) {
+                    std::cout << ":: No measurements found for '"
+                    << selectedSensor << "'\n";
+                    break;
+                }
+
+                //  Compute statistics
+                auto minM   = statistics::getMin(data);
+                auto maxM   = statistics::getMax(data);
+                double mean = statistics::getMean(data); 
+                double sd = statistics::getStdDev(data);
+                
+                    std::cout << "\nStatistics for sensor: " << selectedSensor << "\n";
+                    std::cout << "--------------------------------\n";
+                    std::cout << "Count: " << data.size() << "\n";
+                    std::cout << "Min:   " << minM.value << " " << minM.unit << "\n";
+                    std::cout << "Max:   " << maxM.value << " " << maxM.unit << "\n";
+                    std::cout << "Mean:  " << mean << "\n";
+                    std::cout << "StdDev:" << sd << "\n";
+                
+
                 break;
+            }
 
             case 3:
             storage.saveToFile("data/measurements.csv");
@@ -97,3 +154,7 @@ int main() {
         }
         return 0;
     }
+    
+//  C:\repo\NewRepo\PyProj\Lavalamp_proj
+//  När du har joinat en thread, så vill du inte joina igen
+//  Automic is a thread-safe bool,

@@ -93,4 +93,16 @@ Measurement MeasurementStorage::parseCSVLine(const std::string& line) const {
 
 }
 
-// bas-klass-pointer
+std::vector<Measurement> MeasurementStorage::getBySensor(
+    const std::string& sensorName) const {
+    std::vector<Measurement> filtered;
+
+    for (const auto& m : measurements) {
+        if (m.sensorName == sensorName) {
+            filtered.push_back(m);
+        }
+    }
+    return filtered;
+}
+
+// kika på bas-klass-pointer

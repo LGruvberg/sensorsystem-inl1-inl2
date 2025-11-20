@@ -2,6 +2,7 @@
 #include "measurement.h"
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 class MeasurementStorage {     
 private:
@@ -27,6 +28,8 @@ public:
     void saveToFile(const std::string& filename) const;
 
     void loadFromFile(const std::string& filename);
+
+    std::unordered_map<std::string, int> getSensorCounts() const;
 
 private:
     //  Convert "name, unit, value, timestamp" into a Measurement object

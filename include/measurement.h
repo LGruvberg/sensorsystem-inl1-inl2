@@ -4,7 +4,7 @@
 
 struct Measurement {
     std::string sensorName; // Temperature, Illuminance, Humidity
-    std::string unit;       // '%'
-    double value;          // sensor values
+    std::string unit;       // 'C', 'lx', '%'
+    double value;           // sensor values
     std::time_t timestamp;
 };

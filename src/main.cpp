@@ -6,34 +6,25 @@
 #include <iostream>
 #include <vector>
 
-/*
--   Create 3 sensors
--   Create one storage object
--   Show your main menu
--   Handle choices
--   Use your sensor submenu
--   Read measurements from all or one sensor
--   Print stored measurements
-
-(Note-to-self: commita i "presens", istället för "Added". skriv "Add")
-*/
-
 int main() {
     //  Create storage obj (there should be just one while running the program)
     MeasurementStorage storage;
 
     //  Create sensors
     Sensor temperature("Temperature", "C", -50.0, 300.0);
-    Sensor light("Light", "lx", 0.0, 1000.0);
+    Sensor illuminance("Illuminance", "lx", 0.0, 1000.0);
     Sensor humidity("Humidity", "%", 20.0, 80.0);
 
     //  put sensors in vector container
-    std::vector<Sensor> sensors = { temperature, light, humidity };
+    std::vector<Sensor> sensors = { temperature, illuminance, humidity };
 
     int choice = 0;
+    std::string hint = "";
+
+    utils::clearScreen();
 
     while (true) {
-        utils::printMainMenu();
+        utils::printMainMenu(hint);
 
         if (!utils::inputInt(choice)) {
             std::cout << ":: Invalid input\n";
@@ -48,113 +39,120 @@ int main() {
         }
 
         switch (choice) {
-            case 1: { // Read new measurements
-                int sub = 0;
-                utils::printSensorMenu();
+        case 1: { // Read new measurements
+            int sub = 0;
+            utils::printSensorMenu();
 
-                if (!utils::inputInt(sub)) {
-                    std::cout << ":: Invalid input\n";
-                    break;
-                }
-
-                utils::clearScreen();
-
-                if (sub == 1) { //  Read ALL sensors
-                    for (auto& s : sensors) {
-                        s.read(storage);
-                    }
-                } else if (sub == 2) {
-                    sensors[0].read(storage);   //  Vector position for Temperature
-                } else if (sub == 3) {
-                    sensors[1].read(storage);   //  -||- for Light
-                } else if (sub == 4) {
-                    sensors[2].read(storage);   //  -||- for Humidity
-                } else if (sub == 5) {
-                    //  Return to main menu
-                } else {
-                    std::cout << ":: Invalid selection\n";
-                }
-
-                break;
-            }
-            case 2: {// show all measurements
-                // storage.printAll();
-                std::cout
-                << "\n.:::::::: STATISTICS ::::::::."
-                << "\nSelect sensor:\n"
-                << "1. All sensors\n"
-                << "2. Temperature\n"
-                << "3. Light\n"
-                << "4. Humidity\n"
-                << "Select: ";
-
-                int s = 0;
-
-                if (!utils::inputInt(s)) {  // if 'input != 0'
-                    std::cout << ":: Invalid input\n";
-                    break;
-                }
-
-                std::vector<Measurement> data;
-                if (s == 1) {   // ALL sensors
-                    data = storage.getAll();
-                    } else if (s == 2) {
-                        data = storage.getBySensor("Temperature");
-                    } else if (s == 3) {
-                        data = storage.getBySensor("Light");
-                    } else if (s == 4) {
-                        data = storage.getBySensor("Humidity");
-                    } else {
-                        std::cout << ":: Invalid selection\n";
-                        break;
-                    }
-
-                if (data.empty()) {
-                    std::cout << ":: No measurements found\n";
-                    break;
-                }
-
-                //  Compute statistics
-                auto minM   = statistics::getMin(data);
-                auto maxM   = statistics::getMax(data);
-                double mean = statistics::getMean(data); 
-                double sd = statistics::getStdDev(data);
-                
-                // Print statistics header
-                std::cout << "\nStatistics for: ";
-                if (s == 1)         std::cout << "ALL sensors\n";
-                else if (s == 2)    std::cout << "Temperature\n";
-                else if (s == 3)    std::cout << "Light\n";
-                else if (s == 4)    std::cout << "Humidity\n";
-                std::cout << ".:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.\n";
-                std::cout << "Count: " << data.size() << "\n";
-                std::cout << "Min:   " << minM.value << " " << minM.unit << "\n";
-                std::cout << "Max:   " << maxM.value << " " << maxM.unit << "\n";
-                std::cout << "Mean:  " << mean << "\n";
-                std::cout << "StdDev:" << sd << "\n";
-                
-
+            if (!utils::inputInt(sub)) {
+                std::cout << ":: Invalid input\n";
                 break;
             }
 
-            case 3:
-            storage.saveToFile("data/measurements.csv");
-            std::cout << ":: Saved measurements to 'data/measurements.csv'\n";
-                break;
+            utils::clearScreen();
 
-            case 4:
-            storage.loadFromFile("data/measurements.csv");
-            std::cout << ":: Loaded measurements from 'data/measurements.csv'\n";
-                break;
-
-            default:
-                std::cout << ":: Invalid option\n";
-                break;
+            if (sub == 1) { //  Read ALL sensors
+                for (auto& s : sensors) {
+                    s.read(storage);
+                }
             }
+            else if (sub == 2) {
+                sensors[0].read(storage);   //  Vector position for Temperature
+            }
+            else if (sub == 3) {
+                sensors[1].read(storage);   //  -||- for Light
+            }
+            else if (sub == 4) {
+                sensors[2].read(storage);   //  -||- for Humidity
+            }
+            else if (sub == 5) {
+                //  Return to main menu
+            }
+            else {
+                std::cout << ":: Invalid selection\n";
+            }
+
+            hint = "";  // Measures exist, remove hint
+            break;
         }
-        return 0;
+        
+        
+        case 2: {// show all measurements
+            std::cout << "\n.::::::: STORED MEASURES :::::::.\n";
+            storage.printAll();
+            // std::cout << ":::::::::::::::::::::::::::::::::\n";
+            utils::printStatsMenu();
+
+            int s = 0;
+
+            if (!utils::inputInt(s)) {  // if 'input != 0'
+                std::cout << ":: Invalid input\n";
+                break;
+            }
+
+            std::vector<Measurement> data;
+            if (s == 1) {   // ALL sensors
+                data = storage.getAll();
+            }
+            else if (s == 2) {
+                data = storage.getBySensor("Temperature");
+            }
+            else if (s == 3) {
+                data = storage.getBySensor("Illuminance");
+            }
+            else if (s == 4) {
+                data = storage.getBySensor("Humidity");
+            }
+            else if (s == 5) {
+                //  Return to main menu
+            }
+            else {
+                std::cout << ":: Invalid selection\n";
+                break;
+            }
+
+            if (data.empty()) {
+                utils::clearScreen();
+                std::cout << "\033[31m!! "   // (color coding)
+                << "Statistics unavailable (Empty dataset)\033[0m";
+                hint = "\033[1m\033[33m\t<- [Select to read measurements]\033[0m";
+                break;
+            }
+
+            //  Compute statistics
+            auto minM = statistics::getMin(data);
+            auto maxM = statistics::getMax(data);
+            double mean = statistics::getMean(data);
+            double sd = statistics::getStdDev(data);
+
+            // Print statistics header
+            std::cout << "\nStatistics for: ";
+            if (s == 1)         std::cout << "ALL sensors\n";
+            else if (s == 2)    std::cout << "Temperature\n";
+            else if (s == 3)    std::cout << "Illuminance\n";
+            else if (s == 4)    std::cout << "Humidity\n";
+            std::cout << ".:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.\n";
+            std::cout << "Count: " << data.size() << "\n";
+            std::cout << "Min:   " << minM.value << " " << minM.unit << "\n";
+            std::cout << "Max:   " << maxM.value << " " << maxM.unit << "\n";
+            std::cout << "Mean:  " << mean << "\n";
+            std::cout << "StdDev:" << sd << "\n";
+
+            break;
+        }
+
+        case 3:
+            storage.saveToFile("data/measurements.csv");
+            // std::cout << ":: Saved measurements to 'data/measurements.csv'\n";
+            break;
+
+        case 4:
+            storage.loadFromFile("data/measurements.csv");
+            break;
+
+        default:
+            std::cout << ":: Invalid option\n";
+            break;
+        }
     }
-    
-//  C:\repo\NewRepo\PyProj\Lavalamp_proj
-//  När du har joinat en thread, så vill du inte joina igen
-//  Automic is a thread-safe bool,
+    return 0;
+}

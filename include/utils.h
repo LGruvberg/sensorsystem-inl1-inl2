@@ -1,15 +1,22 @@
 #pragma once
 #include <string>
+#include <unordered_map>
 
 namespace utils {
-    //  read int from user (safe)
+    //  Read int from user (safe)
     bool inputInt(int& out);
 
-    //  main menu print
-    void printMainMenu();
-
+    //  Menus
+    void printMainMenu(const std::string& hint = "");
     void printSensorMenu();
+    void printStatsMenu();
 
-    //  clear terminal
+    //  Clear terminal
     void clearScreen();
+
+    //  To add: Bad input
+
+    //  Count each different sensor measure in storage
+    void printSensorBreakdown(const std::unordered_map<std::string, int>& counts);
+
 }

@@ -2,54 +2,122 @@
 
 #### How to compile and run
 ```bash
-# Compile in terminal:
-g++ src/main.cpp src/utils.cpp src/sensor.cpp src/analytics.cpp src/storage.cpp src/measurement.cpp -o SensorSystem
-# if 'g++ src/*.cpp -o SensorSystem' doesn't work for you:
+# In terminal, if 'g++ src/*.cpp -o SensorSystem' doesn't work for you...
 
-# then run: 
+# run:
+g++ src/main.cpp src/utils.cpp src/sensor.cpp src/storage.cpp src/statistics.cpp -o SensorSystem.exe
+
+# then, run: 
 .\SensorSystem.exe
 ```
 
-## main.cpp
--	Shows the main menu
--	Handles user input
--	Creates sensors
--	Calls storage functions
--	Runs the app loop
--	Delegates actual work to other classes
-##### Think of it as the user interface logic.
+## Functionality
+##### This program simulates IoT sensor output
+**so far, it uses three sensors:**
+-   Temperature (C)
+-   Illuminance (lx)
+-   Humidity (%)
 
-## sensor.cpp / .hpp 
-Each sensor has:
--	name
--	unit
--	ID
--	min/max value range
-The 'read()':
--	Generates a random value between min/max
--	Creates a Measurement
--	Stores it in MeasurementStorage
--	Prints the colored reading (based on value extremeties)
--	Returns the numeric value
-##### Sensors are the data producers.
+**Every time a sensor is read, a measurement object is created**
+**it consists of:**
+-   Sensor name
+-   Unit
+-   Value
+-   Timestamp
+All values are stored in a vector, inside MeasurementStorage.
 
-## measurement.cpp / .cpp 
-Represents one reading:
--   value
--   sensor name
--   unit
--   timestamp
+### Additional features implemented (not required)
+-	Color-coded menu output	(occationally).
+-	Detailed save/load log showing amount of measurements from each sensor.
+-	Hidden variable message in main menu (std::string hint) 
+    -   is empty until the user navigates to statistics without there being data.
 
-## storage.cpp / .hpp
--   addMeasurement() — store new reading
--   printAll() — print all stored readings
--   getMeasurementsBySensor() — filter by sensor
--   printSensorAnalytics() — min/max/mean/stdev
-##### Acts like a database.
+### User Interface
+*The UI consists of one main menu, and two sub menus*
 
-## statistics.cpp / .hpp 
-Math helpers for storage:
--   Minimum value
--   Maximum value
--   Average
--   Standard deviation
+#### The Main Menu
+1.  **Read new measurements from sensor(s)**
+    ∟   Navigate to the Sensor sub menu, where you can:
+        1.  *Read from ALL sensors*
+        2.  *Read from one specific sensor*
+        3.  *-||-*
+        4.  *-||-*
+        5.  *Return to the main menu*
+2.  **Show measurements and statistics**
+    Here, all of your current measurements will show.
+    ∟   You will also navigate to the Statistics sub menu,
+        Where you can:
+        1.  *Show statistics for ALL sensors*
+        2.  *Show statistics from one specific sensor*
+        3.  *-||-*
+        4.  *-||-*
+        5.  *Return to the main menu*
+3.  **Save measurements to file**
+    ∟   Save measurements to .csv file.
+4.  **Load measurements from file**
+    ∟   Load measurements from .csv file.
+5.  **Exit**
+    ∟   Kill / stop running the program (like 'CTRL + c').
+
+### File structure
+
+#### SensorSystemProject/
+###### - .gitignore
+###### - README.md
+##### - data/
+        ∟   measurements.csv
+*I could've excluded the data folder (↑) in .gitignore, but I think it's good to be able to peak at it in my GitHub repo.*
+
+##### - src/
+        ∟   main.cpp
+        ∟   sensor.cpp
+        ∟   storage.cpp
+        ∟   utils.cpp
+        ∟   statistics.cpp
+
+##### - include/
+        ∟   measurement.h   |   struct Measurement
+        ∟   sensor.h        |   *class Sensor* (reading and measurement creation)
+        ∟   storage.h       |   *class Storage* (vector + save/load)
+        ∟   utils.h         |   Input, menu functions (and some cool stuff)
+        ∟   statistics.h    |   Max, Min, Mean, Standard Deviation
+
+### measurement.h
+**A simple struct** (like a skeleton)
+that consists of the following variables:
+    **string sensorName**
+    **string unit**
+    **double value**
+    **std::time_t timestamp**
+
+#### MeasurementStorage
+-	Stores all measurements in a std::vector<Measurement>
+-	Can filter measurements by sensor
+-	saveToFile() and loadFromFile() for saving .csv file
+-	Has helper methods such as getSensorCounts()
+
+#### namespace statistics
+**Calculates:**
+-	minimun value
+-	maximum value
+-	mean
+-	standard deviation
+
+#### utils
+-	integer input (safe)
+-	Menus for 
+    -   Main menu
+    -   Sensor meun
+    -   Statistics menu
+-	Clear screen    (like 'clear' in the terminal) 
+-   Colored text displaying amount of each sensor type loaded or saved.
+
+~~To do~~:
+-   Menu, interface
+-   Struct for measurement values
+-   Multiple .h/.cpp files
+-   Simulate multiple sensors
+-   input handling
+-   Storage in vector
+-   Statistics - min/max/mean/stddev
+-   File handling, save/load

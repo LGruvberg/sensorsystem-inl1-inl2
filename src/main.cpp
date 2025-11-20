@@ -43,7 +43,7 @@ int main() {
         switch (choice) {
         case 1: { // Read new measurements
             int sub = 0;
-            utils::printSensorMenu();
+            utils::printSensorMenu(sensors);
 
             if (!utils::inputInt(sub)) {
                 std::cout << ":: Invalid input\n";
@@ -52,23 +52,20 @@ int main() {
 
             utils::clearScreen();
 
-            if (sub == 1) { //  Read ALL sensors
-                for (auto& s : sensors) {
-                    // s.read(storage);
+            //  Sensor menu
+            if (sub == 1) { // option 1. Read ALL sensors (element 1)
+                for (auto& s : sensors)
                     s->read(storage);
-                }
             }
-            else if (sub == 2) {
-                // sensors[0].read(storage);   //  Vector position for Temperature
-                sensors[0]->read(storage);
+            else if (sub >= 2 && sub <= (int)sensors.size() + 1) { 
+                // 'sub -2' converts user's choice to the sensors's vector index position, like:
+                //  sub = 2 is at index 0 (first sensor)
+                //  sub = 3 is at index 1 (second sensor)
+                //  Say we've added a fourth sensor (sub = 5)...
+                sensors[sub - 2]->read(storage);    
+                //  ...in that case, 'sensors[sub -2]' translates to 'sensors[3]', 
             }
-            else if (sub == 3) {
-                sensors[1]->read(storage);   //  -||- for Light
-            }
-            else if (sub == 4) {
-                sensors[2]->read(storage);   //  -||- for Humidity
-            }
-            else if (sub == 5) {
+            else if (sub == (int)sensors.size() + 2) { // positioned at index for 'return to main menu'
                 //  Return to main menu
             }
             else {
@@ -80,33 +77,28 @@ int main() {
         }
         
         
-        case 2: {// show all measurements
+        case 2: {   // show all measurements, statistics menu
             std::cout << ".::::::: STORED MEASURES :::::::." << std::endl;
             storage.printAll();
-            utils::printStatsMenu();
 
+            utils::printStatsMenu(sensors);
             int s = 0;
-
             if (!utils::inputInt(s)) {  // if 'input != 0'
                 std::cout << ":: Invalid input\n";
                 break;
             }
 
             std::vector<Measurement> data;
+            
             if (s == 1) {   // ALL sensors
                 data = storage.getAll();
             }
-            else if (s == 2) {
-                data = storage.getBySensor("Temperature");
+            else if (s >= 2 && s <= (int)sensors.size() + 1) {
+                std::string sensorName = sensors[s - 2]->getName();
+                data = storage.getBySensor(sensorName);
             }
-            else if (s == 3) {
-                data = storage.getBySensor("Illuminance");
-            }
-            else if (s == 4) {
-                data = storage.getBySensor("Humidity");
-            }
-            else if (s == 5) {
-                //  Return to main menu
+            else if (s == (int)sensors.size() + 2) { // Return to main meun
+                break;
             }
             else {
                 std::cout << ":: Invalid selection\n";
@@ -129,12 +121,15 @@ int main() {
             double mean = statistics::getMean(data);
             double sd = statistics::getStdDev(data);
 
-            // Print statistics header
+            // Print statistics header (brief)
             std::cout << "\nStatistics for: ";
-            if (s == 1)         std::cout << "ALL sensors\n";
-            else if (s == 2)    std::cout << "Temperature (C)\n";
-            else if (s == 3)    std::cout << "Illuminance (lx)\n";
-            else if (s == 4)    std::cout << "Humidity (%)\n";
+            if (s == 1) {
+                std::cout << "All sensors\n";
+            } else {
+                std::cout << sensors[s - 2]->getName()
+                << " (" << sensors[s - 2]->getUnit() << ")\n";
+            }
+            
             std::cout << ".:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.\n";
             std::cout << "Occurrances: " << data.size() << "\n";
             std::cout << "Min:\n-\t" << minM.value << " " << minM.unit << "\n";

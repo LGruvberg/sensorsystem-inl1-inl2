@@ -122,11 +122,11 @@ that consists of the following variables:
 -   ~~Statistics - min/max/mean/stddev~~
 -   ~~File handling, save/load~~
 
--	A base class Sensor
--	Three derived classes
--	virtual ~Sensor()
--	virtual std::string getName() const = 0;
--	virtual double read() = 0;
+-	~~A base class Sensor~~
+-	~~Three derived classes~~
+-	~~virtual ~Sensor() destructor~~
+-	~~virtual getName() and getUnit()~~
+-	~~virtual double read()~~
 -	Polymorphic container:
 	-	std::vector<std::unique_ptr<Sensor>> sensors;
 -	No raw pointers
@@ -134,13 +134,13 @@ that consists of the following variables:
 -	main.cpp should not know about concrete sensor types
 
 Modify:
--	sensor.h
+-	~~sensor.h~~
 -	sensor.cpp
 
 Create three new files:
--	temperature_sensor.h / .cpp
--	illuminance_sensor.h / .cpp
--	humidity_sensor.h / .cpp
+-	~~temperSensor.h / .cpp~~
+-	~~illumiSensor.h / .cpp~~
+-	~~humidiSensor.h / .cpp~~
 
 -	Turn Sensor into an interface (pure virtual class)
 -	Move min/max/unit/value generation logic into derived classes

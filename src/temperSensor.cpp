@@ -1,8 +1,12 @@
 #include "../include/temperSensor.h"
+#include "../include/alarm.h"
+#include "../include/alarmStorage.h"
 #include <iostream>
 #include <ctime>
 
-double TemperatureSensor::read(MeasurementStorage& storage) {
+double TemperatureSensor::read(MeasurementStorage& storage,
+    AlarmStorage& alarms) {
+
     //  Randomizer
     static std::random_device rd;
     static std::mt19937 gen(rd());
@@ -17,7 +21,18 @@ double TemperatureSensor::read(MeasurementStorage& storage) {
     m.timestamp = std::time(nullptr);
     storage.addMeasurement(m);
 
-    std::cout << name << " = " << value << "\t" << unit << "\n";
-    return value;
+    //  Verify alarm
+    if (value > threshold) {
+        Alarm a;
+        a.sensorName = name;
+        a.value = value;
+        a.threshold = threshold;
+        a.timestamp = m.timestamp;
+        alarms.addAlarm(a);
+    }
+    
 
+    std::cout << name << " = " << value << "\t" << unit << "\n";
+
+    return value;
 }

@@ -1,11 +1,13 @@
-# IoT25_LovGru-oop-assignment1
+# sensorsystem-inl2
+
+[GitHub sensorsystem-inl2](https://github.com/LGruvberg/sensorsystem-inl1-inl2.git)
 
 #### How to compile and run
 ```bash
 # In terminal, if 'g++ src/*.cpp -o SensorSystem' doesn't work for you...
 
 # run:
-g++ src/main.cpp src/utils.cpp src/sensor.cpp src/storage.cpp src/statistics.cpp -o SensorSystem.exe
+g++ src/main.cpp src/utils.cpp src/storage.cpp src/statistics.cpp .\src\temperSensor.cpp .\src\illumiSensor.cpp .\src\humidiSensor.cpp .\src\alarmStorage.cpp -o SensorSystem
 
 # then, run: 
 .\SensorSystem.exe

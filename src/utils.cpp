@@ -26,6 +26,8 @@ namespace utils {
         << "3.\tSave measurements to file\n"
         << "4.\tLoad measurements from file\n"
         << "5.\tExit\n"
+        << "6.\tThreshold config\n"
+        << "7.\tShow alarms\n"
         << "Select:\t";
 }
 void printSensorMenu(const std::vector<std::unique_ptr<Sensor>>& sensors) {

@@ -5,6 +5,8 @@
 #include "../include/temperSensor.h"
 #include "../include/illumiSensor.h"
 #include "../include/humidiSensor.h"
+#include "../include/alarm.h"
+#include "../include/alarmStorage.h"
 
 #include <iostream>
 #include <vector>
@@ -13,6 +15,7 @@
 int main() {
     //  Create storage obj (there should be just one while running the program)
     MeasurementStorage storage;
+    AlarmStorage alarmStorage;
 
     std::vector<std::unique_ptr<Sensor>> sensors;
     
@@ -55,14 +58,14 @@ int main() {
             //  Sensor menu
             if (sub == 1) { // option 1. Read ALL sensors (element 1)
                 for (auto& s : sensors)
-                    s->read(storage);
+                    s->read(storage, alarmStorage);
             }
             else if (sub >= 2 && sub <= (int)sensors.size() + 1) { 
                 // 'sub -2' converts user's choice to the sensors's vector index position, like:
                 //  sub = 2 is at index 0 (first sensor)
                 //  sub = 3 is at index 1 (second sensor)
                 //  Say we've added a fourth sensor (sub = 5)...
-                sensors[sub - 2]->read(storage);    
+                sensors[sub - 2]->read(storage, alarmStorage);    
                 //  ...in that case, 'sensors[sub -2]' translates to 'sensors[3]', 
             }
             else if (sub == (int)sensors.size() + 2) { // positioned at index for 'return to main menu'
@@ -146,6 +149,26 @@ int main() {
 
         case 4:
             storage.loadFromFile("data/measurements.csv");
+            break;
+
+        case 6: {
+            utils::printSensorMenu(sensors);
+            int choice = 0;
+
+            if (!utils::inputInt(choice)) break;
+
+            if (choice >= 2 && choice <= sensors.size() + 1) {
+                int t;
+                std::cout << "Enter new threshold:\t";
+                if (utils::inputInt(t)) {
+                    sensors[choice - 2]->setThreshold(t);
+                    std::cout << "Threshold updated.\n";
+                }
+            }
+            break;
+        }
+        case 7:
+            alarmStorage.printAll();
             break;
 
         default:

@@ -1,8 +1,11 @@
 #include "../include/illumiSensor.h"
+#include "../include/alarm.h"
+#include "../include/alarmStorage.h"
 #include <iostream>
 #include <ctime>
 
-double IlluminanceSensor::read(MeasurementStorage& storage) {
+double IlluminanceSensor::read(MeasurementStorage& storage, 
+    AlarmStorage& alarms) {
     
     //  Randomizer
     static std::random_device rd;
@@ -17,6 +20,16 @@ double IlluminanceSensor::read(MeasurementStorage& storage) {
     m.value = value;
     m.timestamp = std::time(nullptr);
     storage.addMeasurement(m);
+
+    //  Verify alarm
+    if (value > threshold) {
+        Alarm a;
+        a.sensorName = name;
+        a.value = value;
+        a.threshold = threshold;
+        a.timestamp = m.timestamp;
+        alarms.addAlarm(a);
+    }
 
     std::cout << name << " = " << value << "\t" << unit << "\n";
     return value;

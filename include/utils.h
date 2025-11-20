@@ -17,8 +17,6 @@ namespace utils {
     //  Clear terminal
     void clearScreen();
 
-    //  To add: Bad input
-
     //  Count each different sensor measure in storage
     void printSensorBreakdown(const std::unordered_map<std::string, int>& counts);
 

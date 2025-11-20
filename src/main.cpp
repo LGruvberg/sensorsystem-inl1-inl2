@@ -79,7 +79,6 @@ int main() {
         case 2: {// show all measurements
             std::cout << "\n.::::::: STORED MEASURES :::::::.\n";
             storage.printAll();
-            // std::cout << ":::::::::::::::::::::::::::::::::\n";
             utils::printStatsMenu();
 
             int s = 0;
@@ -114,7 +113,9 @@ int main() {
                 utils::clearScreen();
                 std::cout << "\033[31m!! "   // (color coding)
                 << "Statistics unavailable (Empty dataset)\033[0m";
+
                 hint = "\033[1m\033[33m\t<- [Select to read measurements]\033[0m";
+
                 break;
             }
 
@@ -142,7 +143,6 @@ int main() {
 
         case 3:
             storage.saveToFile("data/measurements.csv");
-            // std::cout << ":: Saved measurements to 'data/measurements.csv'\n";
             break;
 
         case 4:

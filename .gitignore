@@ -1,0 +1,28 @@
+# --- Executables ---
+*.exe
+*.out
+*.app
+
+# --- Compiled object files ---
+*.o
+*.obj
+
+# --- VS Code files ---
+.vscode/
+*.code-workspace
+
+# --- Build directories ---
+build/
+cmake-build*/
+out/
+bin/
+Debug/
+Release/
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+
+# --- Temporary files ---
+*.log
+*.tmp

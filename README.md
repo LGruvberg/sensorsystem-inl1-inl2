@@ -112,12 +112,36 @@ that consists of the following variables:
 -	Clear screen    (like 'clear' in the terminal) 
 -   Colored text displaying amount of each sensor type loaded or saved.
 
-~~To do~~:
--   Menu, interface
--   Struct for measurement values
--   Multiple .h/.cpp files
--   Simulate multiple sensors
--   input handling
--   Storage in vector
--   Statistics - min/max/mean/stddev
--   File handling, save/load
+### To do:
+-   ~~Menu, interface~~
+-   ~~Struct for measurement values~~
+-   ~~Multiple .h/.cpp files~~
+-   ~~Simulate multiple sensors~~
+-   ~~input handling~~
+-   ~~Storage in vector~~
+-   ~~Statistics - min/max/mean/stddev~~
+-   ~~File handling, save/load~~
+
+-	A base class Sensor
+-	Three derived classes
+-	virtual ~Sensor()
+-	virtual std::string getName() const = 0;
+-	virtual double read() = 0;
+-	Polymorphic container:
+	-	std::vector<std::unique_ptr<Sensor>> sensors;
+-	No raw pointers
+-	No type-checking from main
+-	main.cpp should not know about concrete sensor types
+
+Modify:
+-	sensor.h
+-	sensor.cpp
+
+Create three new files:
+-	temperature_sensor.h / .cpp
+-	illuminance_sensor.h / .cpp
+-	humidity_sensor.h / .cpp
+
+-	Turn Sensor into an interface (pure virtual class)
+-	Move min/max/unit/value generation logic into derived classes
+-	Prepare for polymorphic usage in main

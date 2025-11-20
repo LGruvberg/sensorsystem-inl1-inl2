@@ -2,21 +2,23 @@
 #include "../include/storage.h"
 #include "../include/utils.h"
 #include "../include/statistics.h"
+#include "../include/temperSensor.h"
+#include "../include/illumiSensor.h"
+#include "../include/humidiSensor.h"
 
 #include <iostream>
 #include <vector>
+#include <memory>
 
 int main() {
     //  Create storage obj (there should be just one while running the program)
     MeasurementStorage storage;
 
-    //  Create sensors
-    Sensor temperature("Temperature", "C", -50.0, 300.0);
-    Sensor illuminance("Illuminance", "lx", 0.0, 1000.0);
-    Sensor humidity("Humidity", "%", 20.0, 80.0);
-
-    //  put sensors in vector container
-    std::vector<Sensor> sensors = { temperature, illuminance, humidity };
+    std::vector<std::unique_ptr<Sensor>> sensors;
+    
+    sensors.push_back(std::make_unique<TemperatureSensor>());
+    sensors.push_back(std::make_unique<IlluminanceSensor>());
+    sensors.push_back(std::make_unique<HumiditySensor>());
 
     int choice = 0;
     std::string hint = "";
@@ -52,17 +54,19 @@ int main() {
 
             if (sub == 1) { //  Read ALL sensors
                 for (auto& s : sensors) {
-                    s.read(storage);
+                    // s.read(storage);
+                    s->read(storage);
                 }
             }
             else if (sub == 2) {
-                sensors[0].read(storage);   //  Vector position for Temperature
+                // sensors[0].read(storage);   //  Vector position for Temperature
+                sensors[0]->read(storage);
             }
             else if (sub == 3) {
-                sensors[1].read(storage);   //  -||- for Light
+                sensors[1]->read(storage);   //  -||- for Light
             }
             else if (sub == 4) {
-                sensors[2].read(storage);   //  -||- for Humidity
+                sensors[2]->read(storage);   //  -||- for Humidity
             }
             else if (sub == 5) {
                 //  Return to main menu

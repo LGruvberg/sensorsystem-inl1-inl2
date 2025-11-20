@@ -1,1 +1,4 @@
 sensorName,unit,value,timestamp
+Temperature,C,156.721,1763657174
+Illuminance,lx,886.276,1763657174
+Humidity,%,25.8378,1763657174

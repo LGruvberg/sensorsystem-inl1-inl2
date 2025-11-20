@@ -81,7 +81,7 @@ int main() {
         
         
         case 2: {// show all measurements
-            std::cout << "\n.::::::: STORED MEASURES :::::::.\n";
+            std::cout << ".::::::: STORED MEASURES :::::::." << std::endl;
             storage.printAll();
             utils::printStatsMenu();
 
@@ -132,15 +132,15 @@ int main() {
             // Print statistics header
             std::cout << "\nStatistics for: ";
             if (s == 1)         std::cout << "ALL sensors\n";
-            else if (s == 2)    std::cout << "Temperature\n";
-            else if (s == 3)    std::cout << "Illuminance\n";
-            else if (s == 4)    std::cout << "Humidity\n";
+            else if (s == 2)    std::cout << "Temperature (C)\n";
+            else if (s == 3)    std::cout << "Illuminance (lx)\n";
+            else if (s == 4)    std::cout << "Humidity (%)\n";
             std::cout << ".:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.\n";
-            std::cout << "Count: " << data.size() << "\n";
-            std::cout << "Min:   " << minM.value << " " << minM.unit << "\n";
-            std::cout << "Max:   " << maxM.value << " " << maxM.unit << "\n";
-            std::cout << "Mean:  " << mean << "\n";
-            std::cout << "StdDev:" << sd << "\n";
+            std::cout << "Occurrances: " << data.size() << "\n";
+            std::cout << "Min:\n-\t" << minM.value << " " << minM.unit << "\n";
+            std::cout << "Max:\n-\t" << maxM.value << " " << maxM.unit << "\n";
+            std::cout << "Mean:\n-\t" << mean << "\n";
+            std::cout << "StdDev:\n-\t" << sd << "\n";
 
             break;
         }

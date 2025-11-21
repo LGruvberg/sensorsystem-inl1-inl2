@@ -2,8 +2,6 @@
 
 [GitHub sensorsystem-inl2](https://github.com/LGruvberg/sensorsystem-inl1-inl2.git)
 
-**UML:** [sensor-system-LG-inl2-UML_TrueDark.drawio.png](https://drive.google.com/file/d/1KHXYC9Xv4IxFyxZxOrMZyvhOSwxuju6N/view?usp=sharing)
-
 #### How to compile and run
 ```bash
 # In terminal, if 'g++ src/*.cpp -o SensorSystem' doesn't work for you...
@@ -14,6 +12,9 @@ g++ src/main.cpp src/utils.cpp src/storage.cpp src/statistics.cpp .\src\temperSe
 # then, run: 
 .\SensorSystem.exe
 ```
+
+**UML:** [sensor-system-LG-inl2-UML_TrueDark.drawio.png](https://drive.google.com/file/d/1KHXYC9Xv4IxFyxZxOrMZyvhOSwxuju6N/view?usp=sharing)
+<img width="1352" height="1204" alt="sensor-system-LG-inl2-UML_TrueDark drawio" src="https://github.com/user-attachments/assets/743f5c23-28fc-4a0f-8caa-d1fa43287858" />
 
 ## Functionality
 *This program simulates IoT sensor output*

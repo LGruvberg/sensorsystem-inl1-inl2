@@ -3,6 +3,7 @@
 #include <limits>
 #include <unordered_map>
 #include <iomanip>
+#include <sstream>
 
 namespace utils {
     
@@ -83,10 +84,22 @@ void printThresholdMenu(const std::vector<std::unique_ptr<Sensor>>& sensors) {
 
     int index = 2;
     for (const auto& s : sensors) {
+        double th = s->getThreshold();
+        std::string display;
+        
+        if (th == std::numeric_limits<double>::max()) {
+            display = "No threshold set";
+        } else {
+            // Format nicely, no scientific notation
+            std::ostringstream oss;
+            oss << std::fixed << std::setprecision(2) << th;
+            display = oss.str() + " " + s->getUnit();
+        }
         std::cout << index << ".\t"
-          << s->getName()
-          << " (current threshold = "
-          << s->getThreshold() << " " << s->getUnit() << ")\n";
+            << s->getName()
+            << " (current threshold = "
+            << display
+            << ")\n";
         index++;
     }
     std::cout << "Select:\t";

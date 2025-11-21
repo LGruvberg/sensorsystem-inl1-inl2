@@ -13,7 +13,6 @@
 #include <memory>
 
 int main() {
-    //  Create storage obj (there should be just one while running the program)
     MeasurementStorage storage;
     AlarmStorage alarmStorage;
 
@@ -61,11 +60,9 @@ int main() {
                     s->read(storage, alarmStorage);
             }
             else if (sub >= 2 && sub <= (int)sensors.size() + 1) { 
-                // 'sub -2' converts user's choice to the sensors's vector index position, like:
-                //  sub = 2 is at index 0 (first sensor)
-                //  sub = 3 is at index 1 (second sensor)
-                //  Say we've added a fourth sensor (sub = 5)...
                 sensors[sub - 2]->read(storage, alarmStorage);    
+                // 'sub -2' converts user's choice to the sensors's vector index position
+                //  Say we've added a fourth sensor (sub = 5)...
                 //  ...in that case, 'sensors[sub -2]' translates to 'sensors[3]', 
             }
             else if (sub == (int)sensors.size() + 2) { // positioned at index for 'return to main menu'

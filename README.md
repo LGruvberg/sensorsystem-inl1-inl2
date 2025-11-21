@@ -2,6 +2,8 @@
 
 [GitHub sensorsystem-inl2](https://github.com/LGruvberg/sensorsystem-inl1-inl2.git)
 
+**UML:** [sensor-system-LG-inl2-UML_TrueDark.drawio.png](https://drive.google.com/file/d/1KHXYC9Xv4IxFyxZxOrMZyvhOSwxuju6N/view?usp=sharing)
+
 #### How to compile and run
 ```bash
 # In terminal, if 'g++ src/*.cpp -o SensorSystem' doesn't work for you...
@@ -14,7 +16,7 @@ g++ src/main.cpp src/utils.cpp src/storage.cpp src/statistics.cpp .\src\temperSe
 ```
 
 ## Functionality
-##### This program simulates IoT sensor output
+*This program simulates IoT sensor output*
 **so far, it uses three sensors:**
 -   Temperature (C)
 -   Illuminance (lx)
@@ -129,21 +131,3 @@ that consists of the following variables:
 -	~~virtual ~Sensor() destructor~~
 -	~~virtual getName() and getUnit()~~
 -	~~virtual double read()~~
--	Polymorphic container:
-	-	std::vector<std::unique_ptr<Sensor>> sensors;
--	No raw pointers
--	No type-checking from main
--	main.cpp should not know about concrete sensor types
-
-Modify:
--	~~sensor.h~~
--	sensor.cpp
-
-Create three new files:
--	~~temperSensor.h / .cpp~~
--	~~illumiSensor.h / .cpp~~
--	~~humidiSensor.h / .cpp~~
-
--	Turn Sensor into an interface (pure virtual class)
--	Move min/max/unit/value generation logic into derived classes
--	Prepare for polymorphic usage in main

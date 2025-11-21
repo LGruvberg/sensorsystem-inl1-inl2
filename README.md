@@ -1,18 +1,22 @@
-# IoT25_LovGru-oop-assignment1
+# sensorsystem-inl2
+
+[GitHub sensorsystem-inl2](https://github.com/LGruvberg/sensorsystem-inl1-inl2.git)
+
+**UML:** [sensor-system-LG-inl2-UML_TrueDark.drawio.png](https://drive.google.com/file/d/1KHXYC9Xv4IxFyxZxOrMZyvhOSwxuju6N/view?usp=sharing)
 
 #### How to compile and run
 ```bash
 # In terminal, if 'g++ src/*.cpp -o SensorSystem' doesn't work for you...
 
 # run:
-g++ src/main.cpp src/utils.cpp src/sensor.cpp src/storage.cpp src/statistics.cpp -o SensorSystem.exe
+g++ src/main.cpp src/utils.cpp src/storage.cpp src/statistics.cpp .\src\temperSensor.cpp .\src\illumiSensor.cpp .\src\humidiSensor.cpp .\src\alarmStorage.cpp -o SensorSystem
 
 # then, run: 
 .\SensorSystem.exe
 ```
 
 ## Functionality
-##### This program simulates IoT sensor output
+*This program simulates IoT sensor output*
 **so far, it uses three sensors:**
 -   Temperature (C)
 -   Illuminance (lx)
@@ -112,12 +116,18 @@ that consists of the following variables:
 -	Clear screen    (like 'clear' in the terminal) 
 -   Colored text displaying amount of each sensor type loaded or saved.
 
-~~To do~~:
--   Menu, interface
--   Struct for measurement values
--   Multiple .h/.cpp files
--   Simulate multiple sensors
--   input handling
--   Storage in vector
--   Statistics - min/max/mean/stddev
--   File handling, save/load
+### To do:
+-   ~~Menu, interface~~
+-   ~~Struct for measurement values~~
+-   ~~Multiple .h/.cpp files~~
+-   ~~Simulate multiple sensors~~
+-   ~~input handling~~
+-   ~~Storage in vector~~
+-   ~~Statistics - min/max/mean/stddev~~
+-   ~~File handling, save/load~~
+
+-	~~A base class Sensor~~
+-	~~Three derived classes~~
+-	~~virtual ~Sensor() destructor~~
+-	~~virtual getName() and getUnit()~~
+-	~~virtual double read()~~

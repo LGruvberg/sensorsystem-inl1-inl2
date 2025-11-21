@@ -1,20 +1,23 @@
 #pragma once
+#include "sensor.h"
 #include <string>
 #include <unordered_map>
+#include <vector>
+#include <memory>
 
 namespace utils {
     //  Read int from user (safe)
     bool inputInt(int& out);
+    bool inputDouble(double& out);
 
     //  Menus
     void printMainMenu(const std::string& hint = "");
-    void printSensorMenu();
-    void printStatsMenu();
+    void printSensorMenu(const std::vector<std::unique_ptr<Sensor>>& sensors);
+    void printStatsMenu(const std::vector<std::unique_ptr<Sensor>>& sensors);
+    void printThresholdMenu(const std::vector<std::unique_ptr<Sensor>>& sensors);
 
     //  Clear terminal
     void clearScreen();
-
-    //  To add: Bad input
 
     //  Count each different sensor measure in storage
     void printSensorBreakdown(const std::unordered_map<std::string, int>& counts);

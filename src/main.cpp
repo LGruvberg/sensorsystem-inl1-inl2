@@ -2,21 +2,25 @@
 #include "../include/storage.h"
 #include "../include/utils.h"
 #include "../include/statistics.h"
+#include "../include/temperSensor.h"
+#include "../include/illumiSensor.h"
+#include "../include/humidiSensor.h"
+#include "../include/alarm.h"
+#include "../include/alarmStorage.h"
 
 #include <iostream>
 #include <vector>
+#include <memory>
 
 int main() {
-    //  Create storage obj (there should be just one while running the program)
     MeasurementStorage storage;
+    AlarmStorage alarmStorage;
 
-    //  Create sensors
-    Sensor temperature("Temperature", "C", -50.0, 300.0);
-    Sensor illuminance("Illuminance", "lx", 0.0, 1000.0);
-    Sensor humidity("Humidity", "%", 20.0, 80.0);
-
-    //  put sensors in vector container
-    std::vector<Sensor> sensors = { temperature, illuminance, humidity };
+    std::vector<std::unique_ptr<Sensor>> sensors;
+    
+    sensors.push_back(std::make_unique<TemperatureSensor>());
+    sensors.push_back(std::make_unique<IlluminanceSensor>());
+    sensors.push_back(std::make_unique<HumiditySensor>());
 
     int choice = 0;
     std::string hint = "";
@@ -41,7 +45,7 @@ int main() {
         switch (choice) {
         case 1: { // Read new measurements
             int sub = 0;
-            utils::printSensorMenu();
+            utils::printSensorMenu(sensors);
 
             if (!utils::inputInt(sub)) {
                 std::cout << ":: Invalid input\n";
@@ -50,21 +54,18 @@ int main() {
 
             utils::clearScreen();
 
-            if (sub == 1) { //  Read ALL sensors
-                for (auto& s : sensors) {
-                    s.read(storage);
-                }
+            //  Sensor menu
+            if (sub == 1) { // option 1. Read ALL sensors (element 1)
+                for (auto& s : sensors)
+                    s->read(storage, alarmStorage);
             }
-            else if (sub == 2) {
-                sensors[0].read(storage);   //  Vector position for Temperature
+            else if (sub >= 2 && sub <= (int)sensors.size() + 1) { 
+                sensors[sub - 2]->read(storage, alarmStorage);    
+                // 'sub -2' converts user's choice to the sensors's vector index position
+                //  Say we've added a fourth sensor (sub = 5)...
+                //  ...in that case, 'sensors[sub -2]' translates to 'sensors[3]', 
             }
-            else if (sub == 3) {
-                sensors[1].read(storage);   //  -||- for Light
-            }
-            else if (sub == 4) {
-                sensors[2].read(storage);   //  -||- for Humidity
-            }
-            else if (sub == 5) {
+            else if (sub == (int)sensors.size() + 2) { // positioned at index for 'return to main menu'
                 //  Return to main menu
             }
             else {
@@ -76,33 +77,28 @@ int main() {
         }
         
         
-        case 2: {// show all measurements
-            std::cout << "\n.::::::: STORED MEASURES :::::::.\n";
+        case 2: {   // show all measurements, statistics menu
+            std::cout << ".::::::: STORED MEASURES :::::::." << std::endl;
             storage.printAll();
-            utils::printStatsMenu();
 
+            utils::printStatsMenu(sensors);
             int s = 0;
-
             if (!utils::inputInt(s)) {  // if 'input != 0'
                 std::cout << ":: Invalid input\n";
                 break;
             }
 
             std::vector<Measurement> data;
+            
             if (s == 1) {   // ALL sensors
                 data = storage.getAll();
             }
-            else if (s == 2) {
-                data = storage.getBySensor("Temperature");
+            else if (s >= 2 && s <= (int)sensors.size() + 1) {
+                std::string sensorName = sensors[s - 2]->getName();
+                data = storage.getBySensor(sensorName);
             }
-            else if (s == 3) {
-                data = storage.getBySensor("Illuminance");
-            }
-            else if (s == 4) {
-                data = storage.getBySensor("Humidity");
-            }
-            else if (s == 5) {
-                //  Return to main menu
+            else if (s == (int)sensors.size() + 2) { // Return to main meun
+                break;
             }
             else {
                 std::cout << ":: Invalid selection\n";
@@ -125,18 +121,21 @@ int main() {
             double mean = statistics::getMean(data);
             double sd = statistics::getStdDev(data);
 
-            // Print statistics header
+            // Print statistics header (brief)
             std::cout << "\nStatistics for: ";
-            if (s == 1)         std::cout << "ALL sensors\n";
-            else if (s == 2)    std::cout << "Temperature\n";
-            else if (s == 3)    std::cout << "Illuminance\n";
-            else if (s == 4)    std::cout << "Humidity\n";
+            if (s == 1) {
+                std::cout << "All sensors\n";
+            } else {
+                std::cout << sensors[s - 2]->getName()
+                << " (" << sensors[s - 2]->getUnit() << ")\n";
+            }
+            
             std::cout << ".:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.\n";
-            std::cout << "Count: " << data.size() << "\n";
-            std::cout << "Min:   " << minM.value << " " << minM.unit << "\n";
-            std::cout << "Max:   " << maxM.value << " " << maxM.unit << "\n";
-            std::cout << "Mean:  " << mean << "\n";
-            std::cout << "StdDev:" << sd << "\n";
+            std::cout << "Occurrances: " << data.size() << "\n";
+            std::cout << "Min:\n-\t" << minM.value << " " << minM.unit << "\n";
+            std::cout << "Max:\n-\t" << maxM.value << " " << maxM.unit << "\n";
+            std::cout << "Mean:\n-\t" << mean << "\n";
+            std::cout << "StdDev:\n-\t" << sd << "\n";
 
             break;
         }
@@ -147,6 +146,45 @@ int main() {
 
         case 4:
             storage.loadFromFile("data/measurements.csv");
+            break;
+
+        case 6: {
+            utils::printThresholdMenu(sensors);
+            int choice = 0;
+
+            if (!utils::inputInt(choice)) break;
+
+            if (choice == 1) break; // Back to main meun
+
+            if (choice >= 2 && choice <= sensors.size() + 1) {
+                int index = choice -2;
+                auto& sensor = sensors[index];
+
+                //  display min/max
+                std::cout << "Enter new threshold for "
+                << sensor->getName()
+                << " (" << sensor->getMin()
+                << " to " << sensor->getMax()
+                << "): ";
+
+                double t;
+                if (!utils::inputDouble(t)) {
+                    std::cout << ":: Invalid input\n";
+                    break;
+                }
+
+                //  Validate input
+                if (t < sensor->getMin() || t > sensor->getMax()) {
+                    std::cout << ":: Threshold outside valid range\n";
+                    break;
+                }
+                sensor->setThreshold(t);
+                std::cout << "Threshold updated.\n";
+            }
+            break;
+        }
+        case 7:
+            alarmStorage.printAll();
             break;
 
         default:

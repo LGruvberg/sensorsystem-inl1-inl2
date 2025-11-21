@@ -1,27 +1,26 @@
 #pragma once
 #include "measurement.h"
 #include "storage.h"
+#include "alarmStorage.h"
 #include <string>
-#include <random>
 
 class Sensor {
-    private:
-    std::string name;
-    std::string unit;
-    double minValue;
-    double maxValue;
-
     public:
-    Sensor(
-        const std::string& n,
-        const std::string& u,
-        double minV,
-        double maxV)
-        : name(n), unit(u), minValue(minV), maxValue(maxV) {}
+    virtual ~Sensor() = default;    // Important! (For polymorphism)
 
-        std::string getName() const { return name; }
-        std::string getUnit() const { return unit; }
+    //  Pure virtual interface
+    virtual std::string getName() const = 0;
+    virtual std::string getUnit() const = 0;
 
-        //  Readin simulation and return measurement value
-        double read(MeasurementStorage& storage);
+    virtual double getMax() const = 0;
+    virtual double getMin() const = 0;
+
+    //  Threshold interface
+    virtual void setThreshold(double t) = 0;
+    virtual double getThreshold() const = 0;
+
+    //  Alarm storage is added to read()
+    virtual double read(MeasurementStorage& storage, 
+        AlarmStorage& alarmStorage) = 0;
+
 };

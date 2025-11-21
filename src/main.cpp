@@ -152,18 +152,37 @@ int main() {
             break;
 
         case 6: {
-            utils::printSensorMenu(sensors);
+            utils::printThresholdMenu(sensors);
             int choice = 0;
 
             if (!utils::inputInt(choice)) break;
 
+            if (choice == 1) break; // Back to main meun
+
             if (choice >= 2 && choice <= sensors.size() + 1) {
-                int t;
-                std::cout << "Enter new threshold:\t";
-                if (utils::inputInt(t)) {
-                    sensors[choice - 2]->setThreshold(t);
-                    std::cout << "Threshold updated.\n";
+                int index = choice -2;
+                auto& sensor = sensors[index];
+
+                //  display min/max
+                std::cout << "Enter new threshold for "
+                << sensor->getName()
+                << " (" << sensor->getMin()
+                << " to " << sensor->getMax()
+                << "): ";
+
+                double t;
+                if (!utils::inputDouble(t)) {
+                    std::cout << ":: Invalid input\n";
+                    break;
                 }
+
+                //  Validate input
+                if (t < sensor->getMin() || t > sensor->getMax()) {
+                    std::cout << ":: Threshold outside valid range\n";
+                    break;
+                }
+                sensor->setThreshold(t);
+                std::cout << "Threshold updated.\n";
             }
             break;
         }

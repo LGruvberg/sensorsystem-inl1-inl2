@@ -12,10 +12,10 @@ void AlarmStorage::printAll() const {
         std::tm* tm_ptr = std::localtime(&a.timestamp);
 
         std::cout << std::put_time(tm_ptr, "%Y-%m-%d %H:%M:%S")
-                  << "::\t[ALARM]\t"    // works?
-                  << a.sensorName
-                  << " value=" << a.value
-                  << " threshold=" << a.threshold
+                  << " <- :: [ALARM!]\n"
+                  << a.sensorName << ":"
+                  << "\n-\tValue: " << a.value
+                  << "\n-\tThreshold: " << a.threshold
                   << "\n";
     }
 }

@@ -14,7 +14,17 @@ namespace utils {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return false;
         }
-        
+        return true;
+    }
+
+    bool inputDouble(double& out) {
+        std::cin >> out;
+
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            return false;
+        }
         return true;
     }
     
@@ -34,14 +44,8 @@ void printSensorMenu(const std::vector<std::unique_ptr<Sensor>>& sensors) {
     std::cout 
     << "\n.:::::: SENSOR :: MENU ::::::."
     << "\n:: Read new measurements from:\n"
-    << "\033[1m1.\tALL sensors\033[0m\n"
-    // << "\033[33m"
-    // << "\t2. Temperature\n"
-    // << "\t3. Illuminance (light)\n"
-    // << "\t4. Humidity\033[0m\n"
-    // << "5.\tReturn to main menu\n"
-    // << "Select:\t"
-    ;
+    << "\033[1m1.\tALL sensors\033[0m\n";
+
     int index = 2;
 
     std::cout << "\033[33m";    // color yellow
@@ -60,13 +64,7 @@ void printStatsMenu(const std::vector<std::unique_ptr<Sensor>>& sensors) {
     std::cout
     << ":::::::: STATISTICS MENU ::::::::"
     << "\nSelect sensor:\n"
-    << "1. All sensors\n"
-    // << ":: 2.\tTemperature\n"
-    // << ":: 3.\tIlluminance\n"
-    // << ":: 4.\tHumidity\033[0m\n"
-    // << "5. Return to main menu\n"
-    // << "Select: "
-    ;
+    << "1. All sensors\n";
 
     int index = 2;
     for (const auto& s : sensors) {
@@ -75,7 +73,22 @@ void printStatsMenu(const std::vector<std::unique_ptr<Sensor>>& sensors) {
         index++;
     }
 
-    std::cout << index << ". Return to main menu\n"; // index positioned as the last alternative
+    std::cout << index << ". Return to main menu\n"; // index number becomes the last alternative's number
+    std::cout << "Select:\t";
+}
+
+void printThresholdMenu(const std::vector<std::unique_ptr<Sensor>>& sensors) {
+    std::cout << "\n:::: THRESHOLD CONFIGURATION ::::\n";
+    std::cout << "1.\tReturn to main menu\n";
+
+    int index = 2;
+    for (const auto& s : sensors) {
+        std::cout << index << ".\t"
+          << s->getName()
+          << " (current threshold = "
+          << s->getThreshold() << " " << s->getUnit() << ")\n";
+        index++;
+    }
     std::cout << "Select:\t";
 }
 

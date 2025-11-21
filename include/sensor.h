@@ -12,6 +12,9 @@ class Sensor {
     virtual std::string getName() const = 0;
     virtual std::string getUnit() const = 0;
 
+    virtual double getMax() const = 0;
+    virtual double getMin() const = 0;
+
     //  Threshold interface
     virtual void setThreshold(double t) = 0;
     virtual double getThreshold() const = 0;
